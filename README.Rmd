@@ -5,7 +5,11 @@ Repo for STA 380N Intro to ML Part 2 Take Home Exam
 Due: by end of the working day (5:00 PM US Central time) on Monday, August 15.
 
 Group -
-1) Mihir Deshpande
-2) Amrtitangshu Mukherjee
-3) Eric Wang
-4) Yvonne Wang
+
+## Mihir Deshpande - md46487
+
+## Amritangshu Mukherjee - am222239 
+
+## Penwei Wang - pw8574 
+
+## Yvonne Wang - yw22547
