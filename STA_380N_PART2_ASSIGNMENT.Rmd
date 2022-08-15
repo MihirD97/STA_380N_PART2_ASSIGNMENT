@@ -13,6 +13,32 @@ options(knitr.table.format = "latex")
 # STA 280N Intro to Machine Learning Part 2 Take Home Exam
 
 
+
+```{r setup, echo = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+
+
+
+##### A link to a GitHub repo where the final report has been knitted and stored *in Markdown (.md) or PDF format*.
+
++--------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Type         | Link                                                                                                                                        |
++:=============+:============================================================================================================================================+
+| RMD File     | ##### <https://github.com/AmritangshuM/STA380-am222239-Amrit/blob/main/Final_Assignment_Amritangshu_mlV5.Rmd>                               |
+|              |                                                                                                                                             |
+|              | #####                                                                                                                                       |
+|              | <https://github.com/AmritangshuM/STA380-am222239-Amrit/blob/f2cd431d73536cf4fc606979a91c39ad18f26c2d/Final_Assignment_Amritangshu_mlV5.Rmd> |
++--------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+
+# \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+
+
+
+
 ## Problem 1) Probability practice
 
 __Part A.__ Visitors to your website are asked to answer a single survey question before they get access to the content on the page. Among all of the users, there are two categories: Random Clicker (RC), and Truthful Clicker (TC). There are two possible answers to the survey: yes and no. Random clickers would click either one with equal probability. You are also giving the information that the expected fraction of random clickers is 0.3.  After a trial period, you get the following survey results: 65\% said Yes and 35\% said No.   What fraction of people who are truthful clickers answered yes?  Hint: use the rule of total probability.
@@ -149,7 +175,7 @@ From 1 and 4,
 
 $P(D \mid P) = \frac{0.000023325}{0.0001233225}$
 
-$\therefore P(D \mid P)=0.189138$
+$\therefore P(D \mid P)=0.1891$
 
 Hence, if you test positive, you have an 18.91% chance of having the disease.
 
@@ -257,7 +283,7 @@ ten_week_hits <- ten_week_hits[ten_week_hits$no_songs>=30,]
 
 plt = ggplot(ten_week_hits,aes(x=performer, y=no_songs))+
   geom_col()+
-  theme_solarized()+
+  theme_stata()+
   theme(axis.text.x = element_text(angle = 60, vjust = 0.5))+
   labs(x="Performer/Artist",y="Ten Week Hits", 
        caption="Shown here are list of artists who've had more than 30 \n Ten Week Hit songs in the Billboard 100 since 1958")+
@@ -265,6 +291,150 @@ plt = ggplot(ten_week_hits,aes(x=performer, y=no_songs))+
   
 plt
 ```
+
+
+
+## Visual story telling part 1: green buildings
+
+### The case  
+
+Over the past decade, both investors and the general public have paid increasingly close attention to the benefits of environmentally conscious buildings. There are both ethical and economic forces at work here.  In commercial real estate, issues of eco-friendliness are intimately tied up with ordinary decisions about how to allocate capital. In this context, the decision to invest in eco-friendly buildings could pay off in at least four ways.  
+
+1. Every building has the obvious list of recurring costs: water, climate control, lighting, waste disposal, and so forth. Almost by definition, these costs are lower in green buildings.  
+2. Green buildings are often associated with better indoor environments—the kind that are full of sunlight, natural materials, and various other humane touches. Such environments, in turn, might result in higher employee productivity and lower absenteeism, and might therefore be more coveted by potential tenants. The financial impact of this factor, however, is rather hard to quantify ex ante; you cannot simply ask an engineer in the same way that you could ask a question such as, “How much are these solar panels likely to save on the power bill?”  
+3. Green buildings make for good PR. They send a signal about social responsibility and ecological awareness, and might therefore command a premium from potential tenants who want their customers to associate them with these values. It is widely believed that a good corporate image may enable a firm to charge premium prices, to hire better talent, and to attract socially conscious investors.  
+4. Finally, sustainable buildings might have longer economically valuable lives. For one thing, they are expected to last longer, in a direct physical sense. (One of the core concepts of the green-building movement is “life-cycle analysis,” which accounts for the high front-end environmental impact of ac- quiring materials and constructing a new building in the first place.) Moreover, green buildings may also be less susceptible to market risk—in particular, the risk that energy prices will spike, driving away tenants into the arms of bolder, greener investors.  
+
+Of course, much of this is mere conjecture. At the end of the day, tenants may or may not be willing to pay a premium for rental space in green buildings. We can only find out by carefully examining data on the commercial real-estate market.  
+
+The file [greenbuildings.csv](../data/greenbuildings.csv) contains data on 7,894 commercial rental properties from across the United States. Of these, 685 properties have been awarded either LEED or EnergyStar certification as a green building. You can easily find out more about these rating systems on the web, e.g. at www.usgbc.org. The basic idea is that a commercial property can receive a green certification if its energy efficiency, carbon footprint, site selection, and building materials meet certain environmental benchmarks, as certified by outside engineers.
+
+A group of real estate economists constructed the data in the following way.  Of the 1,360 green-certified buildings listed as of December 2007 on the LEED or EnergyStar websites, current information about building characteristics and monthly rents were available for 685 of them.  In order to provide a control population, each of these 685 buildings was matched to a cluster of nearby commercial buildings in the CoStar database.  Each small cluster contains one green-certified building, and all non-rated buildings within a quarter-mile radius of the certified building.  On average, each of the 685 clusters contains roughly 12 buildings, for a total of 7,894 data points.
+
+The columns of the data set are coded as follows:
+
+- CS.PropertyID:  the building's unique identifier in the CoStar database.  
+- cluster:  an identifier for the building cluster, with each cluster containing one green-certified building and at least one other non-green-certified building within a quarter-mile radius of the cluster center.  
+- size:  the total square footage of available rental space in the building.  
+- empl.gr:  the year-on-year growth rate in employment in the building's geographic region.  
+- Rent:  the rent charged to tenants in the building, in dollars per square foot per calendar year.  
+- leasing.rate:  a measure of occupancy; the fraction of the building's available space currently under lease.  
+- stories:  the height of the building in stories.  
+- age:  the age of the building in years.  
+- renovated:  whether the building has undergone substantial renovations during its lifetime.  
+- class.a, class.b:  indicators for two classes of building quality (the third is Class C).  These are relative classifications within a specific market.  Class A buildings are generally the highest-quality properties in a given market.  Class B buildings are a notch down, but still of reasonable quality.  Class C buildings are the least desirable properties in a given market.  
+- green.rating:  an indicator for whether the building is either LEED- or EnergyStar-certified.  
+- LEED, Energystar:  indicators for the two specific kinds of green certifications.  
+- net:  an indicator as to whether the rent is quoted on a "net contract" basis.  Tenants with net-rental contracts pay their own utility costs, which are otherwise included in the quoted rental price.  
+- amenities:  an indicator of whether at least one of the following amenities is available on-site: bank, convenience store, dry cleaner, restaurant, retail shops, fitness center.  
+- cd.total.07:  number of cooling degree days in the building's region in 2007.  A degree day is a measure of demand for energy; higher values mean greater demand.  Cooling degree days are measured relative to a baseline outdoor temperature, below which a building needs no cooling.  
+- hd.total07:  number of heating degree days in the building's region in 2007.  Heating degree days are also measured relative to a baseline outdoor temperature, above which a building needs no heating.  
+- total.dd.07:  the total number of degree days (either heating or cooling) in the building's region in 2007.  
+- Precipitation:  annual precipitation in inches in the building's geographic region.
+- Gas.Costs:  a measure of how much natural gas costs in the building's geographic region.  
+- Electricity.Costs:  a measure of how much electricity costs in the building's geographic region.  
+- cluster.rent:  a measure of average rent per square-foot per calendar year in the building's local market.  
+
+
+### The goal
+
+An Austin real-estate developer is interested in the possible economic impact of "going green" in her latest project: a new 15-story mixed-use building on East Cesar Chavez, just across I-35 from downtown.  Will investing in a green building be worth it, from an economic perspective?  The baseline construction costs are $100 million, with a 5% expected premium for green certification.
+
+The developer has had someone on her staff, who's been described to her as a "total Excel guru from his undergrad statistics course," run some numbers on this data set and make a preliminary recommendation.  Here's how this person described his process.
+
+>I began by cleaning the data a little bit.  In particular, I noticed that a handful of the buildings in the data set had very low occupancy rates (less than 10\% of available space occupied).  I decided to remove these buildings from consideration, on the theory that these buildings might have something weird going on with them, and could potentially distort the analysis.  Once I scrubbed these low-occupancy buildings from the data set, I looked at the green buildings and non-green buildings separately.  The median market rent in the non-green buildings was $25 per square foot per year, while the median market rent in the green buildings was $27.60 per square foot per year: about $2.60 more per square foot.  (I used the median rather than the mean, because there were still some outliers in the data, and the median is a lot more robust to outliers.)  Because our building would be 250,000 square feet, this would translate into an additional $250000 x 2.6 = $650000 of extra revenue per year if we build the green building.
+
+>Our expected baseline construction costs are $100 million, with a 5% expected premium for green certification.  Thus we should expect to spend an extra $5 million on the green building.  Based on the extra revenue we would make, we would recuperate these costs in $5000000/650000 = 7.7 years.  Even if our occupancy rate were only 90%, we would still recuperate the costs in a little over 8 years.  Thus from year 9 onwards, we would be making an extra $650,000 per year in profit.  Since the building will be earning rents for 30 years or more, it seems like a good financial move to build the green building.
+
+
+The developer listened to this recommendation, understood the analysis, and still felt unconvinced.  She has therefore asked you to revisit the report, so that she can get a second opinion.
+
+Do you agree with the conclusions of her on-staff stats guru?  If so, point to evidence supporting his case.  If not, explain specifically where and why the analysis goes wrong, and how it can be improved.  Do you see the possibility of confounding variables for the relationship between rent and green status?  If so, provide evidence for confounding, and see if you can also make a picture that visually shows how we might "adjust" for such a confounder.    _Tell your story in pictures, with appropriate introductory and supporting text._  
+
+Note: this is intended as an exercise in visual and numerical story-telling. Your approach should rely on pictures and/or tables, not a regression model.  Tell a story understandable to a non-technical audience.  Keep it concise.   
+
+
+### Solution:
+
+```{r Answer 3(a), echo = FALSE}
+library(corrplot)
+library(mosaic)
+library(tidyverse)
+library(gridExtra)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+data_load <- read.csv('data/greenbuildings.csv')
+library(DataExplorer)
+print('Lets check if we have any missing values')
+plot_intro(data_load)
+numeric_columns<- dplyr::select_if(data_load, is.numeric)
+print('Lets look at the distribution of the data')
+plot_histogram(numeric_columns)
+print('Lets look at the correltion between these variables')
+plot_correlation(na.omit(data_load), maxcat = 5L)
+print('Lets look at the pairwise correltion between these variables')
+GGally::ggpairs(data_load, 
+                columns = c('cluster_rent', "class_a", "Rent", 'Gas_Costs', 'green_rating'))
+print('Lets look at the mean and median rent in the data')
+hist(data_load$Rent)
+abline(v = median(data_load$Rent), col = "blue", lwd = 3)
+abline(v = mean(data_load$Rent), col = "red", lwd = 3)
+print('Lets look at the distribution of these features across various metrics')
+p5<-ggplot(data=data_load) + 
+  geom_point(mapping=aes(x=cluster_rent, y=Rent))+
+  labs(title="Measuring cluster rent vs rent")
+p6<-ggplot(data=data_load) + 
+  geom_point(mapping=aes(x=age, y=Rent))+
+  labs(title="Measuring age vs rent")
+p3<-ggplot(data=data_load) + 
+  geom_point(mapping=aes(x=size, y=Rent))+
+  labs(title="Measuring size vs rent")
+p4<-ggplot(data=data_load) + 
+  geom_point(mapping=aes(x=stories, y=Rent))+
+  labs(title="Measuring stories vs rent")
+grid.arrange(p5, p6,p3,p4, nrow = 2)
+print('we observed that Rent is correlated with the cluster rent, size, class A. Additionally, Class a buildings get higher rent')
+library(ggplot2)
+print('Lets look at the impact of Class A buildings on rent of green rated houses')
+p1<-ggplot(data_load,aes(x= Rent, fill=factor(green_rating)))+geom_histogram(bins = 50)+ 
+  facet_wrap(~class_a)+
+  labs(subtitle="Measuring rent with green rating")
+p2<-ggplot(data_load,aes(x= cluster_rent, fill=factor(green_rating)))+geom_histogram(bins = 50)+ 
+  facet_wrap(~class_a)+
+  labs(subtitle="Measuring cluster rent with green rating")
+grid.arrange(p1, p2, nrow = 2)
+print('we can observe that the class A buildings have better rent if they are green rated here')
+print('Lets look at the consumption of resources for green buildings')
+p5<-ggplot(data_load,aes(x= size, fill=factor(green_rating)))+geom_histogram(bins = 50)+
+  labs(subtitle="Measuring size of building with green rating")
+p6<-ggplot(data_load,aes(x= stories, fill=factor(green_rating)))+geom_histogram(bins = 50)+
+  labs(subtitle="Measuring number of stories with green rating")
+p3<-ggplot(data_load,aes(x= Gas_Costs, fill=factor(green_rating)))+geom_histogram(bins = 50)+
+  labs(subtitle="Measuring gas cost with green rating")
+p4<-ggplot(data_load,aes(x= Electricity_Costs, fill=factor(green_rating)))+geom_histogram(bins = 50)+
+  labs(subtitle="Measuring Electricity use of building with green rating")
+grid.arrange(p5, p6,p3,p4, nrow = 4)
+print('Lets look at the density of green rated houses with various metrics')
+ggplot(data_load, aes(class_a, ..count..)) + geom_bar(aes(fill = green_rating))
+g = ggplot(data_load, aes(x=age))
+g + geom_density(aes(fill=factor(green_rating)))+
+  labs(title="Measuring age with green rating vs without")
+g = ggplot(data_load, aes(x=size))
+g + geom_density(aes(fill=factor(green_rating)))+
+  labs(title="Measuring size with green rating vs without")
+g = ggplot(data_load, aes(x=cluster_rent))
+g + geom_density(aes(fill=factor(green_rating)))+
+  labs(title="Measuring cluster_rent with green rating vs without")
+g = ggplot(data_load, aes(x=Rent))
+g + geom_density(aes(fill=factor(green_rating)))+
+  labs(title="Measuring rent with green rating vs without")
+```
+
+We observed most of the green buildings are younger than non-green buildings and the proportion of class a buildings is higher in green buildings
+
+Since Stats Guru fails to account for all factors that affect rent, his analysis is wrong In order to calculate the returns, he began by using the median rent for all buildings.Because of this, he fails to factor in other factors, such as the size and class of the buildings,into his analysis. For instance, we have a class A building will yield a higher rent than a non-green building.
+
 
 
 
@@ -287,7 +457,58 @@ You have broad freedom to look at any variables you'd like here -- try to find t
 
 ### Solution:
 
-Let's first look at hour-wise traffic distribution for months from July to December -
+
+To figure out interesting Capital Metro ridership patterns around the UT-Austin we started with loading the data and then looking at various aspects of the same. We focused on weekly, monthly ridership and also the riding trends during the day.
+
+```{r Answer 4(a), echo = FALSE}
+library(gridExtra)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+capmetro <- read.csv("data/capmetro_UT.csv")
+library(DataExplorer)
+print('Lets check if we have any missing values')
+plot_intro(capmetro)
+numeric_columns<- dplyr::select_if(capmetro, is.numeric)
+print('We can now plot the distribution of this data')
+plot_histogram(numeric_columns)
+print('lets look at the hourly trend of ridership')
+daily_rides = capmetro %>%group_by(hour_of_day) %>%summarize(riders = mean(boarding))
+daily_rides_2 = capmetro %>%group_by(hour_of_day) %>%summarize(riders = mean(alighting))
+p1=ggplot(daily_rides) + geom_line(aes(x=hour_of_day, y=riders))+ ggtitle("Number of people boarding")
+p2=ggplot(daily_rides_2) + geom_line(aes(x=hour_of_day, y=riders))+ ggtitle("Number of people alighting")
+grid.arrange(p1, p2, nrow = 1)
+print('Lets look at the weekly trend of ridership')
+daily_rides_3 = capmetro %>%group_by(hour_of_day,day_of_week) %>%summarize(riders = mean(boarding))
+ggplot(daily_rides_3) + 
+  geom_point(aes(x=hour_of_day, y=riders)) + 
+  facet_wrap(~day_of_week) +
+  labs(x="hour of the day",
+       y="Number of riders",
+       title="Number of riders by day across days of week")
+print('lets look at the monthly trend of ridership')
+daily_rides_4 = capmetro %>%group_by(day_of_week,month) %>%summarize(riders = mean(boarding))
+ggplot(daily_rides_4) + 
+  geom_point(aes(x=day_of_week, y=riders)) + 
+  facet_wrap(~month) +
+  labs(x="Day of the Week",
+       y="Number of riders",
+       title="Number of riders by day across months")
+daily_rides_5 = capmetro %>%group_by(day_of_week,hour_of_day) %>%summarize(temperature = mean(temperature))
+ggplot(daily_rides_5) + 
+  geom_line(aes(x=hour_of_day, y=temperature))+ ggtitle("Temperature trends throughout the week") +
+  facet_wrap(~day_of_week)
+daily_rides_6 = capmetro %>%group_by(day_of_week,hour_of_day,month) %>%summarize(temperature = mean(temperature))
+ggplot(daily_rides_6) + 
+  geom_line(aes(x=day_of_week, y=temperature))+ ggtitle("Temperature range across months") +
+  facet_wrap(~month)
+```
+
+We looked at the daily, weekly and monthly distributions of the data and saw interesting trends like more people leave the bus during the early part of the day and interestingly the temperature of day can also be measure from this data. We also looked at monthly trends in ridership across the months of Oct, Sep and Nov. We also looked at temperature trends and ridership throughout the week.
+
+
+
+Let's also look at hour-wise traffic distribution for months from July to December -
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.show='hold', out.width="50%"}
 
@@ -784,6 +1005,306 @@ quantile(sim1[,n_days]- initial_wealth, prob=0.05)
 Would you look at that, with a more diversified portfolio, we got almost half the value at risk (VaR) at 5% confidence intervals compared to the more concentrated portfolio we analyzed before.
 
 
+Let's take a more standard appraoch and analyze 3 more portfolios with varying levels of risk -
+
+### Portfolio 1 - 10 ETFs Balanced
+
+We will consider the following portfolio for this case :
+
++---------+---------+-------------------------------------------------+
+| S.No    | ETF     | Definition                                      |
++=========+=========+=================================================+
+| 1       | WMT     | Walmart                                         |
++---------+---------+-------------------------------------------------+
+| 2       | TGT     | Target                                          |
++---------+---------+-------------------------------------------------+
+| 3       | XOM     | Exxon Mobil                                     |
++---------+---------+-------------------------------------------------+
+| 4       | MRK     | Merck                                           |
++---------+---------+-------------------------------------------------+
+| 5       | IDV     | iShares International Select Dividend ETF       |
++---------+---------+-------------------------------------------------+
+| 6       | SPY     | SPDR S&P 500 ETF Trust                          |
++---------+---------+-------------------------------------------------+
+| 7       | VTI     | Vanguard                                        |
++---------+---------+-------------------------------------------------+
+| 8       | DIA     | Dow Jones Industrial                            |
++---------+---------+-------------------------------------------------+
+| 9       | JNJ     | Johnson and Johnson                             |
++---------+---------+-------------------------------------------------+
+| 10      | URTY    | Ultra share pro                                 |
++---------+---------+-------------------------------------------------+
+
+: PORTFOLIO 1
+
+```{r Answer 5(a), echo = FALSE}
+library(mosaic)
+library(quantmod)
+library(foreach)
+#----------------------Portfolio 1----------------------------------------------
+mystocks = c("WMT", "TGT", "XOM", "URTY", "JNJ","MRK", "IDV", "SPY", "VTI", "DIA")
+myprices = getSymbols(mystocks, from = "2015-01-01")
+print(mystocks)
+for(ticker in mystocks) {
+  expr = paste0(ticker, "a = adjustOHLC(", ticker, ")")
+  eval(parse(text=expr))
+}
+print('Combine all the returns in a matrix')
+all_returns = cbind(	ClCl(WMTa),
+                     ClCl(TGTa),
+                     ClCl(XOMa),
+                     ClCl(MRKa),
+                     ClCl(JNJa),ClCl(MRKa),ClCl(IDVa),ClCl(SPYa),
+                     ClCl(VTIa),ClCl(DIAa))
+all_returns = as.matrix(na.omit(all_returns))
+# Compute the returns from the closing prices
+#pairs(all_returns)
+# Now loop over 4 trading weeks
+## begin block
+total_wealth = 100000
+weights = c(0.1,0.1,0.1, 0.1, 0.1,0.1,0.1,0.1, 0.1, 0.1)
+holdings = weights * total_wealth
+n_days = 20  # capital T in the notes
+wealthtracker = rep(0, n_days) # Set up a placeholder to track total wealth
+for(today in 1:n_days) {
+  return.today = resample(all_returns, 1, orig.ids=FALSE)  # sampling from R matrix in notes
+  holdings = holdings + holdings*return.today
+  total_wealth = sum(holdings)
+  wealthtracker[today] = total_wealth
+}
+total_wealth
+print('Total wealth through 20 days')
+plot(wealthtracker, type='l')
+## end block
+# Now simulate many different possible futures
+# just repeating the above block thousands of times
+initial_wealth = 100000
+sim1 = foreach(i=1:20, .combine='rbind') %do% {
+  total_wealth = initial_wealth
+  weights = c(0.1,0.1,0.1, 0.1, 0.1,0.1,0.1,0.1, 0.1, 0.1)
+  holdings = weights * total_wealth
+  n_days = 20
+  wealthtracker = rep(0, n_days)
+  for(today in 1:n_days) {
+    return.today = resample(all_returns, 1, orig.ids=FALSE)
+    holdings = holdings + holdings*return.today
+    total_wealth = sum(holdings)
+    wealthtracker[today] = total_wealth
+  }
+  wealthtracker
+}
+# each row is a simulated trajectory
+# each column is a data
+print('Total wealth through simulate many different possible futures')
+hist(sim1[,n_days], 25,main="Histogram for Total wealth (simulation)",xlab="Total Wealth simulated")
+# Profit/loss
+mean(sim1[,n_days])
+mean(sim1[,n_days] - initial_wealth)
+print('Mean profit Loss')
+
+
+hist(sim1[,n_days]- initial_wealth, breaks=30,main="Histogram for Profit/Loss (simulation-initial wealth)",xlab="Profit/Loss" )
+
+
+```
+
+```{r echo=F}
+# 5% value at risk:
+print('5% value at risk')
+quantile(sim1[,n_days]- initial_wealth, prob=0.05)
+```
+
+This first portfolio performs well and this time with a -ve VAR value but a lower profit margin overall compared to our next portfolio. This is potentially due to the high number of stocks which can cause our profits to average out over the stocks that we have.
+
+Let's test out this theory by using a lower total number of stocks in our portfolio and try to measure the profit and VAR value.
+
+### Portfolio 2 - 5 ETFs Risky and balanced
+
+We will consider the following portfolio for this case :
+
++---------+---------+-------------------------------------------------+
+| S.No    | ETF     | Definition                                      |
++=========+=========+=================================================+
+| 1       | MRK     | Merck                                           |
++---------+---------+-------------------------------------------------+
+| 2       | IDV     | iShares International Select Dividend ETF       |
++---------+---------+-------------------------------------------------+
+| 3       | SPY     | SPDR S&P 500 ETF Trust                          |
++---------+---------+-------------------------------------------------+
+| 4       | VTI     | Vanguard                                        |
++---------+---------+-------------------------------------------------+
+| 5       | DIA     | Dow Jones Industrial                            |
++---------+---------+-------------------------------------------------+
+
+: PORTFOLIO 2
+
+```{r Answer 5(b), echo = FALSE}
+#----------------------Portfolio 2----------------------------------------------
+mystocks = c("MRK", "IDV", "SPY", "VTI", "DIA")
+myprices = getSymbols(mystocks, from = "2015-01-01")
+print(mystocks)
+for(ticker in mystocks) {
+  expr = paste0(ticker, "a = adjustOHLC(", ticker, ")")
+  eval(parse(text=expr))
+}
+# Combine all the returns in a matrix
+all_returns = cbind(	ClCl(MRKa),ClCl(IDVa),ClCl(SPYa),
+                     ClCl(VTIa),ClCl(DIAa))
+#head(all_returns)
+all_returns = as.matrix(na.omit(all_returns))
+# Compute the returns from the closing prices
+#pairs(all_returns)
+# Now loop over 4 trading weeks
+## begin block
+total_wealth = 100000
+weights = c(0.2,0.2,0.2, 0.2, 0.2)
+holdings = weights * total_wealth
+n_days = 20  # capital T in the notes
+wealthtracker = rep(0, n_days) # Set up a placeholder to track total wealth
+for(today in 1:n_days) {
+  return.today = resample(all_returns, 1, orig.ids=FALSE)  # sampling from R matrix in notes
+  holdings = holdings + holdings*return.today
+  total_wealth = sum(holdings)
+  wealthtracker[today] = total_wealth
+}
+total_wealth
+print('Total wealth through 20 days')
+plot(wealthtracker, type='l')
+## end block
+# Now simulate many different possible futures
+# just repeating the above block thousands of times
+initial_wealth = 100000
+sim1 = foreach(i=1:20, .combine='rbind') %do% {
+  total_wealth = initial_wealth
+  weights = c(0.2,0.2,0.2, 0.2, 0.2)
+  holdings = weights * total_wealth
+  n_days = 20
+  wealthtracker = rep(0, n_days)
+  for(today in 1:n_days) {
+    return.today = resample(all_returns, 1, orig.ids=FALSE)
+    holdings = holdings + holdings*return.today
+    total_wealth = sum(holdings)
+    wealthtracker[today] = total_wealth
+  }
+  wealthtracker
+}
+# each row is a simulated trajectory
+# each column is a data
+# each column is a data
+print('Total wealth through simulate many different possible futures')
+hist(sim1[,n_days], 25,main="Histogram for Total wealth (simulation)",xlab="Total Wealth simulated")
+# Profit/loss
+mean(sim1[,n_days])
+mean(sim1[,n_days] - initial_wealth)
+print('Mean profit Loss')
+hist(sim1[,n_days]- initial_wealth, breaks=30,main="Histogram for Profit/Loss (simulation-initial wealth)",xlab="Profit/Loss" )
+
+```
+
+```{r echo=F}
+# 5% value at risk:
+print('5% value at risk')
+quantile(sim1[,n_days]- initial_wealth, prob=0.05)
+```
+
+This second portfolio performs worse than portfolio 1 with a lower profit margin overall. This means that it was not helpful to have a lower number of total stocks in the portfolio and as a result assign higher weights to individual stocks in the portfolio.
+
+### Portfolio 3 - Smallcap- Very Risky
+
+Leveraged U.S. Size Factor TR ,VTI:Vanguard We will consider the following portfolio for this case :
+
++---------+---------+-------------------------------------------------+
+| S.No    | ETF     | Definition                                      |
++=========+=========+=================================================+
+| 1       | TNA     | Direxion Daily Small Cap Bull 3x                |
++---------+---------+-------------------------------------------------+
+| 2       | URTY    | ProShares UltraPro                              |
++---------+---------+-------------------------------------------------+
+| 3       | UWM     | ProShares Ultra                                 |
++---------+---------+-------------------------------------------------+
+| 4       | VTI     | Vanguard                                        |
++---------+---------+-------------------------------------------------+
+| 5       | IWML    | ETRACS 2x Leveraged U.S. Size Factor TR         |
++---------+---------+-------------------------------------------------+
+
+: PORTFOLIO 3
+
+```{r Answer 5(c), echo = FALSE}
+library(mosaic)
+library(quantmod)
+library(foreach)
+#----------------------Portfolio 3----------------------------------------------
+mystocks = c("TNA", "URTY", "UWM", "IWML","VTI")
+myprices = getSymbols(mystocks, from = "2015-01-01")
+print(mystocks)
+for(ticker in mystocks) {
+  expr = paste0(ticker, "a = adjustOHLC(", ticker, ")")
+  eval(parse(text=expr))
+}
+# Combine all the returns in a matrix
+all_returns = cbind(	ClCl(TNA),
+                     ClCl(URTY),ClCl(UWM),ClCl(IWML),ClCl(VTI))
+#head(all_returns)
+all_returns = as.matrix(na.omit(all_returns))
+# Compute the returns from the closing prices
+#pairs(all_returns)
+# Now loop over 4 trading weeks
+## begin block
+total_wealth = 100000
+weights = c(0.2,0.2,0.2, 0.2,0.2)
+holdings = weights * total_wealth
+n_days = 20  # capital T in the notes
+wealthtracker = rep(0, n_days) # Set up a placeholder to track total wealth
+for(today in 1:n_days) {
+  return.today = resample(all_returns, 1, orig.ids=FALSE)  # sampling from R matrix in notes
+  holdings = holdings + holdings*return.today
+  total_wealth = sum(holdings)
+  wealthtracker[today] = total_wealth
+}
+total_wealth
+print('Total wealth through 20 days')
+plot(wealthtracker, type='l')
+## end block
+# Now simulate many different possible futures
+# just repeating the above block thousands of times
+initial_wealth = 100000
+sim1 = foreach(i=1:20, .combine='rbind') %do% {
+  total_wealth = initial_wealth
+  weights = c(0.2,0.2,0.2, 0.2, 0.2)
+  holdings = weights * total_wealth
+  n_days = 20
+  wealthtracker = rep(0, n_days)
+  for(today in 1:n_days) {
+    return.today = resample(all_returns, 1, orig.ids=FALSE)
+    holdings = holdings + holdings*return.today
+    total_wealth = sum(holdings)
+    wealthtracker[today] = total_wealth
+  }
+  wealthtracker
+}
+# each row is a simulated trajectory
+# each column is a data
+print('Total wealth through simulate many different possible futures')
+hist(sim1[,n_days], 25,main="Histogram for Total wealth (simulation)",xlab="Total Wealth simulated")
+# Profit/loss
+mean(sim1[,n_days])
+mean(sim1[,n_days] - initial_wealth)
+print('Mean profit Loss')
+hist(sim1[,n_days]- initial_wealth, breaks=30,main="Histogram for Profit/Loss (simulation-initial wealth)",xlab="Profit/Loss" )
+
+
+
+```
+
+
+```{r echo=F}
+# 5% value at risk:
+print('5% value at risk')
+quantile(sim1[,n_days]- initial_wealth, prob=0.05)
+```
+
+This third portfolio performs better than portfolio 2 with a higher profit margin overall. This means that it was helpful to have a risky set of stocks in the portfolio and as a result assign higher weights to individual stocks in the portfolio.Also this gives us a high VAR which makes sense as the portfolio was very risky.
+
 
 
 ## Clustering and PCA
@@ -1030,7 +1551,7 @@ Let's examine these axes and their weights -
 ```{r echo=F}
 # Rotate loadings
 rot_loading <- varimax(PCApilot$rotation[, 1:8])
-rot_loading
+rot_loading$loadings
 
 ```
 
@@ -1069,6 +1590,61 @@ Interests include dating but they're averse to news, business, etc. This might b
 We require at least 8 PC axes to define over 50% variance. This means that not a lot of clearly demarcated groups are visible and the interests are relatively independent.
 
 
+Now, let's try to combine PCA and clustering to obtain possibly better results that are more interpretable -
+
+
+```{r Answer 7(a), echo = FALSE}
+social_dt <- read.csv("data/social_marketing.csv")
+print('Filter dataset on spam and Adult flags')
+social_dt<-social_dt %>% filter(spam ==0 & adult ==0)
+library(DataExplorer)
+print('Plotting the missing values and categorical columns')
+plot_intro(social_dt)
+numeric_columns<- dplyr::select_if(social_dt, is.numeric)
+print('Plotting the distribution of variables')
+plot_histogram(numeric_columns)
+print('Plotting the correlation of items')
+plot_correlation(na.omit(numeric_columns), maxcat = 5L)
+GGally::ggpairs(social_dt, 
+                columns = c('shopping', "travel", "politics", 'food', 'family'))
+print('It seems that tv_films is correlated with school, beauty and art, lets try to build a PCA model on top of it')
+pca_df <- na.omit(social_dt[, c('shopping', "travel", "politics", 'food','school','beauty','art','school', 'family')])
+print('Performaing a PCA analysis to understand the composition')
+plot_prcomp(pca_df, variance_cap = 0.9, nrow = 2L, ncol = 2L,title='PCA analysis of the components')
+print('Lets try to cluster the most correlated variables of this data using Kmeans clustering')
+numeric_columns<- dplyr::select_if(social_dt, is.numeric)
+X = numeric_columns[c("politics","travel","school","beauty","art")]
+X = scale(X, center=TRUE, scale=TRUE)
+mu = attr(X,"scaled:center")
+sigma = attr(X,"scaled:scale")
+# Run k-means with 6 clusters and 25 starts
+clust1 = kmeans(X, 4, nstart=25)
+# What are the clusters
+clust1$center  # not super helpful
+library(cluster)
+library(fpc)
+library(ppclust)
+print('Lets look at the clusters for this set')
+clusplot(X, clust1$cluster, color=TRUE, shade=TRUE,plotchar=TRUE,main='Plotting the clusters from Kmeans model')
+print('Now lets try to combine PCA with Clustering for the most correlated variables')
+library(ggfortify)
+fit <- kmeans(X, 3, iter.max=1000) 
+social_dt$segment<-fit$cluster
+pca <- prcomp(X)  #principle component analysis
+pca_data <- mutate(fortify(pca), col=fit$cluster) 
+print('We want to examine the cluster memberships for each #observation')
+ggplot(pca_data) +  geom_point(aes(x=PC1, y=PC2, fill=factor(col)), 
+                              size=3, col="#7f7f7f", shape=21) + theme_bw(base_family="Helvetica")
+print('Number of members in each cluster')
+barplot(table(fit$cluster), col="#336699")
+print('Plotting the cluster')
+autoplot(fit, data=X, frame=TRUE, frame.type='norm')
+print('The Final Market segments')
+plot_prcomp(X, variance_cap = 0.9, nrow = 2L, ncol = 2L,title='Final market segements')
+```
+
+We observed that using PCA in combination with Kmeans clustering gave us the best separation for components, we can use these market segments as our final set.
+
 
 ## The Reuters corpus  
 
@@ -1099,11 +1675,96 @@ This question will be graded according to three criteria:
 
 ### Solution:
 
-Question: Based on TF-IDF values, can we predict the author of a document?
+-   **Question:** What are the most frequently used words across the entire dataset and are they the same words which are used in the most number of documents?
 
-Answer: Let's first start by getting names of all the authors -
+-   **Approach:** We used the DocumentTermMatrix to calculate the frequencies of word across the entire dataset across authors and we used the inverse document frequency to calculate the usage of these words across documents and plotted these on word cloud to understand the same.
 
-```{r Answer 9, echo=FALSE}
+```{r Answer 8(a), echo = FALSE}
+library(tm) 
+library(tidyverse)
+library(slam)
+library(proxy)
+readerPlain = function(fname){
+  readPlain(elem=list(content=readLines(fname)), 
+            id=fname, language='en') }
+print('load data for all authors')
+file_list = Sys.glob('data/ReutersC50/C50train/*/*.txt')
+author = lapply(file_list, readerPlain) 
+mynames = file_list %>%
+  { strsplit(., '/', fixed=TRUE) } %>%
+  { lapply(., tail, n=2) } %>%
+  { lapply(., paste0, collapse = '') } %>%
+  unlist
+names(author) = mynames
+#list authors
+main_dir <- "data/ReutersC50/C50train/"
+print ("list of directory names/Authors")
+dir_list <- list.dirs(main_dir,full.names = FALSE, 
+                      recursive = FALSE) 
+#print (dir_list)
+#with_author_names = data.frame(cbind(dir_list), stringsAsFactors = FALSE)
+## once you have documents in a vector, you 
+## create a text mining 'corpus' with: 
+library("corpus")
+documents_raw = Corpus(VectorSource(author))
+## Some pre-processing/tokenization steps.
+## tm_map just maps some function to every document in the corpus
+my_documents = documents_raw
+my_documents = tm_map(my_documents, content_transformer(tolower)) # make everything lowercase
+my_documents = tm_map(my_documents, content_transformer(removeNumbers)) # remove numbers
+my_documents = tm_map(my_documents, content_transformer(removePunctuation)) # remove punctuation
+my_documents = tm_map(my_documents, content_transformer(stripWhitespace)) ## remove excess white-space
+## Remove stopwords.  Always be careful with this!
+my_documents = tm_map(my_documents, content_transformer(removeWords), stopwords("en"))
+## create a doc-term-matrix
+DTM_author = DocumentTermMatrix(my_documents)
+class(DTM_author)  # a special kind of sparse matrix format
+## You can inspect its entries...
+DTM_author = removeSparseTerms(DTM_author, 0.95)
+library(data.table) 
+#find frequent terms
+colS <- colSums(as.matrix(DTM_author))
+length(colS)
+doc_features <- data.table(name = attributes(colS)$names, count = colS)
+print('most frequent and least frequent words across the entire dataset')
+doc_features[order(-count)][1:10] #top 10 most frequent words
+doc_features[order(count)][1:10] #least 10 frequent words
+library(ggplot2)
+library(ggthemes)
+ggplot(doc_features[count>5000],aes(name, count))+
+  geom_bar(stat = "identity",fill='lightblue',color='black')+
+  labs(title="Most common words with freq greater than 5000 in entire dataset")
+#create wordcloud
+print('Word cloud of words with min frequency of 1000 in entire dataset')
+library(wordcloud)
+wordcloud(names(colS), colS, min.freq = 1000, scale = c(6,.1), colors = brewer.pal(6, 'Dark2'))
+# construct TF IDF weights
+tfidf_author = weightTfIdf(DTM_author)
+colS <- colSums(as.matrix(tfidf_author))
+length(colS)
+doc_features2 <- data.table(name = attributes(colS)$names, count = colS)
+print('most frequent and least frequent words by number of documents')
+doc_features2[order(-count)][1:10] #top 10 most frequent words
+doc_features2[order(count)][1:10] #least 10 frequent words
+ggplot(doc_features2[count>19],aes(name, count))+
+  geom_bar(stat = "identity",fill='lightblue',color='black')+
+  labs(title="Most common words with freq greater than 19 in individual document")
+print('Word cloud of words with min frequency of 15 in individual dataset')
+#create wordcloud
+library(wordcloud)
+wordcloud(names(colS), colS, min.freq = 15, scale = c(6,.1), colors = brewer.pal(6, 'Dark2'))
+```
+
+-   **Results:** The word clouds have been generated and we can see that these are not the same, which means that the words which have the highest frequency are not he ones which have been used in most number of documents.
+
+-   **Conclusion:** We can conclude that the data distribution is such that some words are used much more frequently within certain documents here.
+
+
+-   **Question:** Based on TF-IDF values, can we predict the author of a document?
+
+-   **Approach:** Let's first start by getting names of all the authors -
+
+```{r Answer 9, echo=FALSE, message=FALSE, warning=FALSE}
 library(tm) 
 library(tidyverse)
 library(slam)
@@ -1129,8 +1790,10 @@ myauths
 ```
 
 
-Now, let's create a vectorized matrix of word counts from the entire corpus against each author (Bag of Words model)
-```{r echo=FALSE}
+Now, let's create a vectorized matrix of word counts from the entire corpus against each author (Bag of Words model where 'author' is the dependent variable).
+
+What does this matrix consist of?
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(naivebayes)
 library(modelr)
 library(rsample)
@@ -1141,7 +1804,7 @@ file_list = Sys.glob('data/ReutersC50/*/*/*.txt')
 all_auth = lapply(file_list, readerPlain) 
 
 # The file names are ugly...
-file_list
+#file_list
 
 # Clean up the file names
 mynames = file_list %>%
@@ -1151,7 +1814,7 @@ mynames = file_list %>%
 	unlist
 	
 # Rename the articles
-mynames
+#mynames
 names(all_auth) = mynames
 
 ## once you have documents in a vector, you 
@@ -1167,8 +1830,8 @@ my_documents = tm_map(my_documents, content_transformer(removePunctuation)) # re
 my_documents = tm_map(my_documents, content_transformer(stripWhitespace)) ## remove excess white-space
 
 ## Remove stopwords.  Always be careful with this!
-stopwords("en")
-stopwords("SMART")
+#stopwords("en")
+#stopwords("SMART")
 my_documents = tm_map(my_documents, content_transformer(removeWords), stopwords("en"))
 
 
@@ -1176,11 +1839,25 @@ my_documents = tm_map(my_documents, content_transformer(removeWords), stopwords(
 DTM_all_auth = DocumentTermMatrix(my_documents)
 DTM_all_auth # some basic summary statistics
 
+
+
+```
+
+
+It's a very sparse matrix.
+
+Let's remove any words which are in the bottom 1% by count (select the top 99%) and see how our matrix is affected -
+```{r echo=FALSE}
 class(DTM_all_auth)  # a special kind of sparse matrix format
 
 DTM_all_auth = removeSparseTerms(DTM_all_auth, 0.99)
+DTM_all_auth
 
+```
 
+Wow! That's quite a reduction! Now that we've removed a lot of such randomly occurring words (variance), let's train a Multinomial Naive Bayes model and look at it's accuracy -
+
+```{r echo=FALSE}
 
 # Create column vector for targets -
 target = rep(myauths, each=50)
@@ -1211,10 +1888,131 @@ nb_model = multinomial_naive_bayes(x=X_train, y=y_train)
 y_test_pred = predict(nb_model, X_test)
 
 # look at the confusion matrix
-table(y_test, y_test_pred)
+head(table(y_test, y_test_pred),3)
+```
 
+Let's look at the accuracy -
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 # overall test-set accuracy
 sum(diag(table(y_test, y_test_pred)))/length(y_test)
 
 ```
+
+We get almost 80% accuracy (79.3%) on a simple Naive Bayes model.
+
+
+
+
+
+## Association rule mining
+
+Revisit the notes on association rule mining and the R example on music playlists: [playlists.R](../R/playlists.R) and [playlists.csv](../data/playlists.csv).  Then use the data on grocery purchases in [groceries.txt](../data/groceries.txt) and find some interesting association rules for these shopping baskets.  The data file is a list of shopping baskets: one person's basket for each row, with multiple items per row separated by commas.  Pick your own thresholds for lift and confidence; just be clear what these thresholds are and say why you picked them.  Do your discovered item sets make sense?  Present your discoveries in an interesting and visually appealing way.  
+ 
+
+Notes: 
+- This is an exercise in visual and numerical story-telling.  Do be clear in your description of what you've done, but keep the focus on the data, the figures, and the insights your analysis has drawn from the data, rather than technical details.  
+- The data file is a list of baskets: one row per basket, with multiple items per row separated by commas.  You'll have to cobble together your own code for processing this into the format expected by the "arules" package.  This is not intrinsically all that hard, but it is the kind of data-wrangling wrinkle you'll encounter frequently on real problems, where your software package expects data in one format and the data comes in a different format.  Figuring out how to bridge that gap is part of the assignment, and so we won't be giving tips on this front.  
+
+
+### Solution:
+
+From the given list, let's first look at which items are bought the most by frequency -
+```{r echo=F, message=F, warning=F}
+
+library(tidyverse)
+library(igraph)
+library(arules)  # has a big ecosystem of packages built around it
+library(arulesViz)
+library(DataExplorer)
+
+# Read in groceries from users
+
+dat <- read.table("data/groceries.txt", col.names = paste("V",1:100), fill = T, sep = ",")
+dat <- dat[,which(!is.na(dat[1,]))]
+
+
+dat_trans = as.list(data.frame(t(dat)))
+dat_trans = lapply(dat_trans, function(z){ z[!is.na(z) & z != ""]})
+
+
+## Cast this variable as a special arules "transactions" class.
+groctrans = as(dat_trans, "transactions")
+#summary(groctrans)
+
+itemFrequencyPlot(groctrans, topN=10,  cex.names=1)
+
+```
+
+
+Now, let's look at a graph of confidence vs support for all the rules we obtain from apriori -
+
+
+```{r echo=F, message=F, warning=F}
+
+# Now run the 'apriori' algorithm
+# Look at rules with support > .005 & confidence >.1 & length (# artists) <= 4
+# Now run the 'apriori' algorithm
+#print("Look at rules with support > .005 & confidence >.1 & length (# artists) <= 4")
+groceryrules = apriori(groctrans, 
+                     parameter=list(support=.005, confidence=.1, maxlen=4))
+     
+
+# Look at the output... so many rules!
+#inspect(grocrules)
+
+
+#print('Subset selected with lift >10 and confidence >0.5:')
+#inspect(subset(groceryrules, subset=lift > 2))
+#inspect(subset(groceryrules, subset=confidence > 0.15 & lift > 2))
+
+
+
+# plot all the rules in (support, confidence) space
+# notice that high lift rules tend to have low support
+plot(groceryrules)
+
+
+```
+
+We can see most of the points that have low support have high confidence.
+
+We can also see that a majority of rules that have high lift (3 or more) tend to have lower confidence.
+
+
+Let's color the points based on order of the rules -
+
+```{r echo=F, message=FALSE, warning=FALSE}
+# can swap the axes and color scales
+
+# "two key" plot: coloring is by size (order) of item set
+plot(groceryrules, method='two-key plot')
+
+```
+
+Most of the rules are of order 2 and 3. Most of order 1 rules have very low confidence and most of order 4 rules have relatively high confidence and low support.
+
+
+Let's look at a graphical representation of all rules that have a confidence of more than 0.15 and a lift of more than 2 -
+
+
+```{r echo=F}
+
+# graph-based visualization
+# export
+# associations are represented as edges
+# For rules, each item in the LHS is connected
+# with a directed edge to the item in the RHS. 
+grocery_graph = associations2igraph(subset(groceryrules, lift>2), associationsAsNodes = FALSE)
+igraph::write_graph(grocery_graph, file='groceries.graphml', format = "graphml")
+
+
+```
+
+![Graph weighted by confidence](conf.png)
+
+
+A majority of rules contain whole milk, vegetables, root vegetables, yogurt, eggs, etc.
+
+Items like napkins, buttermilk, salty snacks, berries, etc are not bought too often as compared to other items and they have low confidence as well. Items like sliced cheese, oil etc aren't bought that often either but have comparatively high confidence.
+
 
