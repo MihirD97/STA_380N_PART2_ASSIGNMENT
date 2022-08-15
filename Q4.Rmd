@@ -1,0 +1,195 @@
+---
+title: "Q4"
+author: "Mihir Deshpande"
+date: '2022-08-14'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+## Visual story telling part 2: Capital Metro data
+
+The file [capmetro_UT.csv](../data/capmetro_UT.csv) contains data from Austin's own Capital Metro bus network, including shuttles to, from, and around the UT campus. These data track ridership on buses in the UT area. Ridership is measured by an optical scanner that counts how many people embark and alight the bus at each stop. Each row in the data set corresponds to a 15-minute period between the hours of 6 AM and 10 PM, each and every day, from September through November 2018. The variables are:  
+
+- _timestamp_: the beginning of the 15-minute window for that row of data
+- _boarding_: how many people got on board any Capital Metro bus on the UT campus in the specific 15 minute window
+- _alighting_: how many people got off ("alit") any Capital Metro bus on the UT campus in the specific 15 minute window
+- _day_of_week_ and _weekend_: Monday, Tuesday, etc, as well as an indicator for whether it's a weekend.
+- _temperature_: temperature at that time in degrees F
+- _hour_of_day_: on 24-hour time, so 6 for 6 AM, 13 for 1 PM, 14 for 2 PM, etc.
+- _month_: July through December
+
+Your task is to create a figure, or set of related figures, that tell an interesting story about Capital Metro ridership patterns around the UT-Austin campus during the semester in question.  Provide a clear annotation/caption for each figure, but the figure(s) should be more or less stand-alone, in that you shouldn't need many, many paragraphs to convey its meaning.  Rather, the figure together with a concise caption should speak for itself as far as possible. 
+
+You have broad freedom to look at any variables you'd like here -- try to find that sweet spot where you're showing genuinely interesting relationships among more than just two variables, but where the resulting figure or set of figures doesn't become overwhelming/confusing.  (Faceting/panel plots might be especially useful here.)  
+
+
+### Solution:
+
+Let's first look at hour-wise traffic distribution for months from July to December -
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.show='hold', out.width="50%"}
+library(tidyverse)
+library(ggthemes)
+df = read.csv("data/capmetro_UT.csv")
+summary(df)
+#Let's summarize by hour for different months -
+hour_board <- df %>%
+  group_by(month,hour_of_day) %>%
+  summarize(avg_board = mean(boarding))
+
+plt_1 = ggplot(hour_board, aes(x=hour_of_day, y=avg_board,color=month))+
+  geom_line()+
+  theme_stata()+
+  ggtitle("Average no. of people boarding bus per hour")+
+  xlab("Hour of Day")+
+  ylab("No. of people on-boarding")
+
+#Let's summarize by hour for different months -
+hour_alit <- df %>%
+  group_by(month,hour_of_day) %>%
+  summarize(avg_alit = mean(alighting))
+
+
+plt_2 = ggplot(hour_alit, aes(x=hour_of_day, y=avg_alit,color=month))+
+  geom_line()+
+  theme_stata()+
+  ggtitle("Average no. of people off-boarding bus per hour")+
+  xlab("Hour of Day")+
+  ylab("No. of people off-boarding")
+
+par(mfrow=c(1,2))
+plt_1
+plt_2
+```
+
+
+
+There are some weird discrepancies if you look at it without thinking much.
+
+
+We can make the following observations -
+
+* The distribution for no. of people on-boarding and off-boarding doesn't change much in any month
+
+
+* Average ridership is the least in the month of November (maybe because it's too cold and students don't want to take public transport) and most in the month of October
+
+
+* The no. of people on-boarding the bus peaks around 4-6pm in the evening which is when most classes get over and students are heading home.
+
+* No. of people off-boarding the bus is highest in the morning hours, possibly when most students get off at campus for their morning lectures.
+
+* The graphs are not in sync (spikes in on-boarding don't coincide with spikes in off-boarding). This may be the case because students all get off at the same location in campus together but they board the bus over a span of couple of hours (so average boarding per hour is low but off-boarding per hour is high) with the same logic being applied to spikes in on-boarding count.
+
+
+This distribution seems to be heavily influenced by students going to and fro from campus for college. Let's try to look at the distribution on the weekends -
+
+```{r echo=F, message=F, warning=F, fig.show='hold', out.width="50%"}
+hour_board_day <- df[df$weekend=="weekend",] %>%
+  group_by(month,hour_of_day) %>%
+  summarize(avg_board = mean(boarding))
+
+plt_3 = ggplot(hour_board_day, aes(x=hour_of_day, y=avg_board,color=month))+
+  geom_line()+
+  theme_stata()+
+  ggtitle("Average no. of people boarding bus per hour")+
+  xlab("Hour of Day")+
+  ylab("No. of people on-boarding")
+
+#Let's summarize by hour for different months -
+hour_alit_day <- df[df$weekend=="weekend",] %>%
+  group_by(month,hour_of_day) %>%
+  summarize(avg_alit = mean(alighting))
+
+
+plt_4 = ggplot(hour_alit_day, aes(x=hour_of_day, y=avg_alit,color=month))+
+  geom_line()+
+  theme_stata()+
+  ggtitle("Average no. of people off-boarding bus per hour")+
+  xlab("Hour of Day")+
+  ylab("No. of people off-boarding")
+
+par(mfrow=c(1,2))
+plt_3
+plt_4
+
+```
+
+* The counts are much more varying throughout the day now
+
+* There is an interesting spike in no. of off-boarding people in October towards the end of the day. Maybe this is because October is when students have their mid-terms for the semester so they tend to stay late on campus and go home during late hours of the day.
+
+
+Let's also look at how weekend ridership changes based on temperature (since the weekday ridership is expected to not be affected by temperature since students have to go to college regardless) -
+
+```{r echo=F, message=F, warning=F, fig.show='hold', out.width="50%"}
+# Create temperature variable -
+df$temp_bucket = unlist(lapply(df$temperature, function(x){if (x > 29 & x<60){"29-60"} 
+  else if(x>=60 & x<80){"60-80"} else if (x>=80 & x<100){"80-100"} }))
+
+# Group by this new variable -
+hour_board_temp <- df[!is.na(df$temperature)&df$weekend=="weekend",] %>%
+  group_by(temp_bucket,hour_of_day) %>%
+  summarize(avg_board = mean(boarding))
+
+plt_3 = ggplot(hour_board_temp, aes(x=hour_of_day, y=avg_board,color=temp_bucket))+
+  geom_line()+
+  theme_stata()+
+  ggtitle("Average no. of people boarding bus per hour")+
+  xlab("Hour of Day")+
+  ylab("No. of people on-boarding")
+
+#Let's summarize by hour for different months -
+hour_alit_temp <- df[!is.na(df$temperature)&df$weekend=="weekend",] %>%
+  group_by(temp_bucket,hour_of_day) %>%
+  summarize(avg_alit = mean(alighting))
+
+
+plt_4 = ggplot(hour_alit_temp, aes(x=hour_of_day, y=avg_alit,color=temp_bucket))+
+  geom_line()+
+  theme_stata()+
+  ggtitle("Average no. of people off-boarding bus per hour")+
+  xlab("Hour of Day")+
+  ylab("No. of people off-boarding")
+
+par(mfrow=c(1,2))
+plt_3
+plt_4
+
+```
+
+* The temperature doesn't seem to affect ridership during the weekend so much since the patterns and numbers match those when we don't account for temperature separately.
+We've got some pretty interesting insights from these graphs!
+
+Finally, let's look at the difference in total on-boardings and off-boardings per day -
+
+```{r echo=F}
+
+df$day = format(as.Date(df$timestamp,format="%Y-%m-%d %H:%M:%S"), format = "%Y-%m-%d")
+day_sum_diff <- df %>%
+  group_by(day) %>%
+  summarize(sum_board=sum(boarding), sum_alit = sum(alighting))
+day_sum_diff$diff = day_sum_diff$sum_board - day_sum_diff$sum_alit
+
+plt_5 = ggplot(day_sum_diff, aes(x=day, y=diff))+
+  geom_point()+
+  geom_line(aes(x=day, y=diff))+
+  theme_stata()+
+  ggtitle("Difference is on-boarders and off-boarders")+
+  xlab("Date")+
+  ylab("No. of on-boarders - No. of off-boarders")+
+  scale_x_discrete(breaks=day_sum_diff$day[c(T,F,F,F,F)])+
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
+plt_5
+
+```
+
+
+We can see that there is a huge discrepancy between no. of on-boarders and no. of off-boarders every day (ideally the difference should be 0 unless ~300 people are hiding in the bus at the end of each day). Capital Metro needs to work on the optical metro system a bit more to get an accurate count!
