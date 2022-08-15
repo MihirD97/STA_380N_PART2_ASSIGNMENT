@@ -2,7 +2,7 @@
 title: "STA_380N_PART2_EXAM"
 author: "Mihir Deshpande"
 date: '2022-08-04'
-output: html_document
+output: pdf_document
 ---
 
 
@@ -27,10 +27,9 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 +--------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | Type         | Link                                                                                                                                        |
 +:=============+:============================================================================================================================================+
-| RMD File     | ##### <https://github.com/AmritangshuM/STA380-am222239-Amrit/blob/main/Final_Assignment_Amritangshu_mlV5.Rmd>                               |
+| RMD File     | #####                                |
 |              |                                                                                                                                             |
-|              | #####                                                                                                                                       |
-|              | <https://github.com/AmritangshuM/STA380-am222239-Amrit/blob/f2cd431d73536cf4fc606979a91c39ad18f26c2d/Final_Assignment_Amritangshu_mlV5.Rmd> |
+|              | #####                                                                          
 +--------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 
 # \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
@@ -1888,10 +1887,9 @@ nb_model = multinomial_naive_bayes(x=X_train, y=y_train)
 y_test_pred = predict(nb_model, X_test)
 
 # look at the confusion matrix
-head(table(y_test, y_test_pred),3)
+
 ```
 
-Let's look at the accuracy -
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # overall test-set accuracy
 sum(diag(table(y_test, y_test_pred)))/length(y_test)
